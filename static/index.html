@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PyParty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="landing">
+    <div class="card">
+      <h1 class="logo">Py<span>Party</span></h1>
+      <p class="sub">Write Python together in real time, then run it.</p>
+
+      <label for="name">Your name</label>
+      <input id="name" class="field" maxlength="24" placeholder="e.g. Sam" autocomplete="off">
+
+      <button id="create" class="btn primary">Create a new room</button>
+
+      <div class="divider">or join a friend</div>
+      <label for="code">Room code</label>
+      <div class="row">
+        <input id="code" class="field" placeholder="snake-1234" autocomplete="off">
+        <button id="join" class="btn">Join</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    const nameEl = document.getElementById("name");
+    const codeEl = document.getElementById("code");
+    try { nameEl.value = localStorage.getItem("pyparty-name") || ""; } catch {}
+    function saveName() {
+      const n = nameEl.value.trim();
+      if (!n) { nameEl.focus(); return false; }
+      try { localStorage.setItem("pyparty-name", n); } catch {}
+      return true;
+    }
+    document.getElementById("create").onclick = () => { if (saveName()) location.href = "/new"; };
+    function join() {
+      const code = codeEl.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
+      if (!code) { codeEl.focus(); return; }
+      if (saveName()) location.href = "/r/" + code;
+    }
+    document.getElementById("join").onclick = join;
+    codeEl.addEventListener("keydown", e => { if (e.key === "Enter") join(); });
+    nameEl.addEventListener("keydown", e => { if (e.key === "Enter" && saveName()) location.href = "/new"; });
+  </script>
+</body>
+</html>

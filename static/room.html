@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PyParty room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="app">
+    <header>
+      <a href="/" style="text-decoration:none;color:inherit"><h1 class="logo">Py<span>Party</span></h1></a>
+      <span class="room-code"><span id="dot" class="status-dot"></span><span id="roomCode"></span></span>
+      <button id="share" class="btn">Copy invite link</button>
+      <div class="spacer"></div>
+      <div id="users" class="users"></div>
+      <button id="download" class="btn hide-sm" title="Download as .py">Download</button>
+      <button id="run" class="btn run" disabled title="Ctrl+Enter">Loading Python…</button>
+    </header>
+    <main>
+      <div class="editor-wrap"><textarea id="editor"></textarea></div>
+      <aside class="side">
+        <div class="pane-head">Output <span id="outWho" class="who"></span><div class="spacer"></div><button id="clear" class="btn">Clear</button></div>
+        <pre id="output"><span class="note">Press Run to see your program's output here. Everyone in the room sees it too.</span></pre>
+        <details class="stdin">
+          <summary>Program input (for input())</summary>
+          <textarea id="stdin" class="field" placeholder="One line per input() call"></textarea>
+        </details>
+        <div class="chat">
+          <div class="pane-head">Chat</div>
+          <div id="messages"></div>
+          <form id="chatForm">
+            <input id="chatInput" class="field" maxlength="500" placeholder="Say something…" autocomplete="off">
+            <button class="btn">Send</button>
+          </form>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <div id="nameModal" class="modal" hidden>
+    <form class="card" id="nameForm">
+      <h2 class="logo" style="font-size:22px">Join <span id="modalRoom"></span></h2>
+      <label for="nameInput">Your name</label>
+      <input id="nameInput" class="field" maxlength="24" placeholder="e.g. Sam" autocomplete="off" required>
+      <button class="btn primary">Join room</button>
+    </form>
+  </div>
+  <div id="toast" class="toast"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/comment/comment.min.js"></script>
+  <script src="/static/ot.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>
