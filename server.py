@@ -35,14 +35,26 @@ for friend in ["Ada", "Guido", "you"]:
     print(greet(friend))
 '''
 
+LANGS = {"python", "javascript", "lua", "sql", "html"}
+
 app = FastAPI()
 app.mount("/static", StaticFiles(directory=STATIC), name="static")
+
+
+@app.middleware("http")
+async def isolate(request, call_next):
+    # Cross-origin isolation lets the code runner pause for input() while it runs.
+    response = await call_next(request)
+    response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
+    response.headers["Cross-Origin-Embedder-Policy"] = "require-corp"
+    return response
 
 
 class Room:
     def __init__(self, code):
         self.code = code
         self.doc = Doc(STARTER)
+        self.lang = "python"
         self.history = []        # list of op lists; history[i] made version offset+i+1
         self.offset = 0          # version before history[0]
         self.users = {}          # id -> {"ws", "name", "color"}
@@ -70,7 +82,7 @@ class Room:
     def init_msg(self, uid):
         return {"type": "init", "id": uid, "color": self.users[uid]["color"],
                 "doc": self.doc.text(), "version": self.version,
-                "users": self.user_list(), "room": self.code}
+                "users": self.user_list(), "room": self.code, "lang": self.lang}
 
 
 rooms: dict[str, Room] = {}
@@ -175,6 +187,13 @@ async def ws_endpoint(ws: WebSocket, code: str):
                 await room.broadcast({"type": "op", "version": room.version,
                                       "ops": ops, "from": uid}, skip=uid)
 
+            elif kind == "lang":
+                if msg.get("lang") in LANGS and msg["lang"] != room.lang:
+                    room.lang = msg["lang"]
+                    u = room.users[uid]
+                    await room.broadcast({"type": "lang", "lang": room.lang,
+                                          "name": u["name"]}, skip=uid)
+
             elif kind == "cursor":
                 p = msg.get("p")
                 if isinstance(p, int):
@@ -194,7 +213,7 @@ async def ws_endpoint(ws: WebSocket, code: str):
                     "run": str(msg.get("run", ""))[:32],
                     "text": str(msg.get("text", ""))[:20_000],
                     "done": bool(msg.get("done")), "error": bool(msg.get("error")),
-                    "stopped": bool(msg.get("stopped")),
+                    "stopped": bool(msg.get("stopped")), "html": bool(msg.get("html")),
                 }, skip=uid)
 
     except WebSocketDisconnect:

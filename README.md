@@ -4,11 +4,13 @@ Multiplayer Python coding. Make a room, share the link, and everyone edits the
 same file live (with each other's cursors and a chat). Hit **Run** (or Ctrl+Enter)
 and the code runs in your browser; everyone in the room sees the output.
 
+- Pick the room's language: **Python, JavaScript, Lua, SQL (SQLite) or HTML/CSS/JS**.
+  Switching changes it for everyone in the room.
 - Server: Python (FastAPI + WebSockets) keeps the shared file in sync.
-- Running code: [Pyodide](https://pyodide.org) (real Python 3.12 in the browser).
-  Code never runs on the server, so hosting it publicly is safe and cheap.
-  `import numpy`, `pandas`, etc. load automatically.
-- `input()` reads from the "Program input" box, one line per call.
+- Running code happens in the browser (Python via [Pyodide](https://pyodide.org),
+  Lua via wasmoon, SQL via sql.js, HTML in a sandboxed preview). Code never runs on
+  the server, so hosting it publicly is safe and cheap. `import numpy` etc. just works.
+- `input()` (Python/JS) and `io.read()` (Lua) ask you right in the output panel.
 
 ## Run it on your computer
 

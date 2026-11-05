@@ -18,15 +18,23 @@
       <button id="share" class="btn">Copy invite link</button>
       <div class="spacer"></div>
       <div id="users" class="users"></div>
-      <button id="download" class="btn hide-sm" title="Download as .py">Download</button>
-      <button id="run" class="btn run" disabled title="Ctrl+Enter">Loading Python…</button>
+      <button id="download" class="btn hide-sm" title="Download the code">Download</button>
+      <select id="lang" class="btn" title="Language for this room (everyone switches)">
+        <option value="python">Python</option>
+        <option value="javascript">JavaScript</option>
+        <option value="lua">Lua</option>
+        <option value="sql">SQL</option>
+        <option value="html">HTML / CSS / JS</option>
+      </select>
+      <button id="run" class="btn run" disabled title="Ctrl+Enter">Loading…</button>
     </header>
     <main>
       <div class="editor-wrap"><textarea id="editor"></textarea></div>
       <aside class="side">
         <div class="pane-head">Output <span id="outWho" class="who"></span><div class="spacer"></div><button id="clear" class="btn">Clear</button></div>
         <pre id="output"><span class="note">Press Run to see your program's output here. Everyone in the room sees it too.</span></pre>
-        <details class="stdin">
+        <iframe id="preview" title="Page preview" sandbox="allow-scripts allow-modals allow-forms" hidden></iframe>
+        <details class="stdin" id="stdinBox" hidden>
           <summary>Program input (for input())</summary>
           <textarea id="stdin" class="field" placeholder="One line per input() call"></textarea>
         </details>
@@ -54,6 +62,12 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/lua/lua.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/comment/comment.min.js"></script>
